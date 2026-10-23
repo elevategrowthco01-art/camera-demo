@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Camera Demo</title>
+</head>
+<body>
+<h2>Camera Demo</h2>
+<p>Camera preview ke liye permission dein.</p>
+
+<video id="video" autoplay playsinline
+style="width:100%;max-width:400px"></video>
+<br><br>
+<button id="start">Open Camera</button>
+<button id="capture">Take Photo</button>
+<br><br>
+<canvas id="canvas" style="width:100%;max-width:400px"></canvas>
+
+<script>
+const video = document.getElementById("video");
+const canvas = document.getElementById("canvas");
+
+document.getElementById("start").onclick = async () => {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: "user" }
+    });
+    video.srcObject = stream;
+  } catch (e) {
+    alert("Camera permission nahi mili: " + e.message);
+  }
+};
+
+document.getElementById("capture").onclick = () => {
+  if (!video.srcObject) {
+    alert("Pehle Open Camera dabao.");
+    return;
+  }
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext("2d").drawImage(video, 0, 0);
+};
+</script>
+</body>
+</html>
